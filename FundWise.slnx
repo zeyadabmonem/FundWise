@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FundWise.API/FundWise.API.csproj" />
+    <Project Path="src/FundWise.Application/FundWise.Application.csproj" />
+    <Project Path="src/FundWise.Contracts/FundWise.Contracts.csproj" />
+    <Project Path="src/FundWise.Domain/FundWise.Domain.csproj" />
+    <Project Path="src/FundWise.Infrastructure/FundWise.Infrastructure.csproj" />
+    <Project Path="src/FundWise.Persistence/FundWise.Persistence.csproj" />
+    <Project Path="src/FundWise.Shared/FundWise.Shared.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FundWise.FunctionalTests/FundWise.FunctionalTests.csproj" />
+    <Project Path="tests/FundWise.IntegrationTests/FundWise.IntegrationTests.csproj" />
+    <Project Path="tests/FundWise.UnitTests/FundWise.UnitTests.csproj" />
+  </Folder>
+</Solution>
