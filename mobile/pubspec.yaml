@@ -23,7 +23,7 @@ dependencies:
 
   # Networking
   dio: ^5.4.1
-  http_parser: ^2.0.1
+  http_parser: ^4.1.0
 
   # Local Storage & Caching
   hive: ^2.2.3
