@@ -114,6 +114,9 @@ if (app.Environment.IsDevelopment() || builder.Configuration.GetValue<bool>("Ena
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "FundWise AI API v1");
         c.RoutePrefix = "swagger";
     });
+
+    // Redirect root URL (/) to /swagger for easy browser access
+    app.MapGet("/", () => Results.Redirect("/swagger"));
 }
 
 app.UseStaticFiles(); // For receipt uploaded images
