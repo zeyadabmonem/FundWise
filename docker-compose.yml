@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: fundwise-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=FundWise_SecretPass123!
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql/data
+    restart: always
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fundwise-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=FundWiseDb;User Id=sa;Password=FundWise_SecretPass123!;TrustServerCertificate=True;
+      - Jwt__SecretKey=FundWiseSecretKey_MustBeAtLeast32BytesLong_SuperSecretKey2026!
+      - OpenAI__ApiKey=${OPENAI_API_KEY:-}
+    ports:
+      - "5000:8080"
+    depends_on:
+      - db
+    restart: always
+
+volumes:
+  sqlserver-data:
