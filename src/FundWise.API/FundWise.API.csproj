@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
+    <PackageReference Include="MediatR" Version="14.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.17" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FundWise.Application\FundWise.Application.csproj" />
+    <ProjectReference Include="..\FundWise.Infrastructure\FundWise.Infrastructure.csproj" />
+    <ProjectReference Include="..\FundWise.Persistence\FundWise.Persistence.csproj" />
+    <ProjectReference Include="..\FundWise.Contracts\FundWise.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>
