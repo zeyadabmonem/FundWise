@@ -9,6 +9,7 @@ import '../../features/capture/presentation/bloc/capture_bloc.dart';
 import '../../features/capture/presentation/pages/manual_capture_page.dart';
 import '../../features/capture/presentation/pages/ocr_capture_page.dart';
 import '../../features/capture/presentation/pages/qr_capture_page.dart';
+import '../../features/capture/presentation/pages/sms_capture_page.dart';
 import '../../features/capture/presentation/pages/voice_capture_page.dart';
 import '../../features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../features/dashboard/presentation/pages/dashboard_page.dart';
@@ -92,6 +93,13 @@ class AppRouter {
         builder: (context, state) => BlocProvider(
           create: (_) => CaptureBloc(sl<ApiClient>()),
           child: const ManualCapturePage(),
+        ),
+      ),
+      GoRoute(
+        path: '/capture/sms',
+        builder: (context, state) => BlocProvider(
+          create: (_) => CaptureBloc(sl<ApiClient>()),
+          child: const SmsCapturePage(),
         ),
       ),
     ],
