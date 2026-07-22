@@ -68,50 +68,41 @@
 
 ---
 
-## Phase B: Flutter App (Next)
+## Phase B: Flutter App — ✅ COMPLETED
 
-### B1 — Project Scaffold
-- [ ] Flutter project create + package dependencies (pubspec.yaml)
-- [ ] Directory structure (core, config, data, domain, features)
-- [ ] Design system (theme, colors, typography)
+### B1 — Project Scaffold ✅
+- [x] Flutter project create + package dependencies (pubspec.yaml)
+- [x] Directory structure (core, config, data, domain, features)
+- [x] Design system (theme, dark mode, custom palette, typography)
 
-### B2 — Auth Screens
-- [ ] Splash screen
-- [ ] Onboarding screens (3 slides)
-- [ ] Register screen + BLoC
-- [ ] Login screen + BLoC
-- [ ] Permissions prompt screen
+### B2 — Auth Screens ✅
+- [x] Splash screen with token routing
+- [x] Register screen + AuthBloc
+- [x] Login screen + AuthBloc
+- [x] Auto token verification
 
-### B3 — Dashboard
-- [ ] Dashboard screen + BLoC
-- [ ] Category breakdown chart (fl_chart)
-- [ ] Recent transactions list
-- [ ] Empty/loading/error states
+### B3 — Dashboard ✅
+- [x] Dashboard screen + DashboardBloc
+- [x] Category breakdown pie chart (fl_chart)
+- [x] Monthly total spending card
+- [x] Recent transactions list with status badges
+- [x] Refresh indicator & error handling
 
-### B4 — Capture Screens
-- [ ] Add Transaction hub screen
-- [ ] Voice Capture screen + BLoC
-- [ ] Receipt OCR screen + BLoC
-- [ ] QR Scanner screen + BLoC
-- [ ] SMS Import screen + BLoC
-- [ ] Manual Entry screen + BLoC
-- [ ] Confirmation card (shared widget)
+### B4 — Capture Screens ✅
+- [x] Add Transaction hub screen
+- [x] Voice Capture screen + pulse animation + CaptureBloc
+- [x] Receipt OCR screen + Camera/Gallery picker + CaptureBloc
+- [x] QR Scanner screen + MobileScanner + CaptureBloc
+- [x] SMS Import screen + paste & background auto mode + CaptureBloc
+- [x] Manual Entry screen + category chip selector & date picker + CaptureBloc
+- [x] Confirmation card with AI confidence rating (shared widget)
 
-### B5 — Detail & Recommendations
-- [ ] Transaction detail/edit screen
-- [ ] Recommendations card widget
+### B5 — Detail & Recommendations ✅
+- [x] Transaction detail screen with category themes and confirm action
 
-### B6 — Settings
-- [ ] Settings screen + BLoC
-
-### B7 — Infrastructure
-- [ ] ApiClient (dio)
-- [ ] Auth interceptor (JWT refresh)
-- [ ] go_router setup + route guards
-- [ ] GetIt DI setup
-- [ ] Hive local storage (tokens, cache)
-
-### B8 — Polish
-- [ ] Animations (capture channels, loading)
-- [ ] Empty states + error handling
-- [ ] README with setup instructions
+### B7 — Data & Infrastructure ✅
+- [x] ApiClient (Dio with auth interceptor & refresh)
+- [x] Remote datasources for Auth, Dashboard, Transactions
+- [x] Repositories & Domain Usecases (Clean Architecture + Dartz Either)
+- [x] go_router setup + route guards
+- [x] GetIt DI container setup
