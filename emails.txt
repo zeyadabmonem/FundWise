@@ -1,0 +1,9 @@
+For TestFlight: Use this user to test the app
+Email: zeyad@fundwise.ai
+Password: FundWise@2026
+
+For Development: Use this user to test the app
+Email: [EMAIL_ADDRESS]
+Password: [PASSWORD]
+
+
