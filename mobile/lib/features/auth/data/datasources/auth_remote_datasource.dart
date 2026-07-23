@@ -21,7 +21,7 @@ class AuthRemoteDatasource {
     required String currency,
   }) async {
     final response = await _apiClient.dio.post('/auth/register', data: {
-      'fullName': name,
+      'name': name,
       'email': email,
       'password': password,
       'currency': currency,
@@ -30,13 +30,24 @@ class AuthRemoteDatasource {
   }
 
   AuthUser _mapUser(Map<String, dynamic> data) {
+    final tokens = data['tokens'] as Map<String, dynamic>?;
+    final user = data['user'] as Map<String, dynamic>?;
+
+    final accessToken = tokens?['accessToken'] ?? data['accessToken'] ?? data['token'];
+    final refreshToken = tokens?['refreshToken'] ?? data['refreshToken'];
+
+    final userId = user?['id'] ?? user?['userId'] ?? data['userId'] ?? data['id'] ?? '';
+    final name = user?['name'] ?? user?['fullName'] ?? data['fullName'] ?? data['name'] ?? '';
+    final email = user?['email'] ?? data['email'] ?? '';
+    final currency = user?['currency'] ?? data['currency'] ?? 'EGP';
+
     return AuthUser(
-      userId: data['userId'] ?? data['id'] ?? '',
-      name: data['fullName'] ?? data['name'] ?? '',
-      email: data['email'] ?? '',
-      currency: data['currency'] ?? 'EGP',
-      accessToken: data['accessToken'] ?? data['token'],
-      refreshToken: data['refreshToken'],
+      userId: userId.toString(),
+      name: name.toString(),
+      email: email.toString(),
+      currency: currency.toString(),
+      accessToken: accessToken?.toString() ?? '',
+      refreshToken: refreshToken?.toString(),
     );
   }
 }
