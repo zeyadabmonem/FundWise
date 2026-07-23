@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -34,20 +35,46 @@ class _VoiceCapturePageState extends State<VoiceCapturePage> with SingleTickerPr
     super.dispose();
   }
 
+  Future<void> _toggleRecording() async {
+    if (_isRecording) {
+      await _stopRecording();
+    } else {
+      await _startRecording();
+    }
+  }
+
   Future<void> _startRecording() async {
-    if (await _recorder.hasPermission()) {
-      final dir = await getTemporaryDirectory();
-      final path = '${dir.path}/voice_capture.m4a';
-      await _recorder.start(const RecordConfig(), path: path);
-      setState(() => _isRecording = true);
+    try {
+      if (await _recorder.hasPermission()) {
+        String path = '';
+        if (!kIsWeb) {
+          final dir = await getTemporaryDirectory();
+          path = '${dir.path}/voice_capture.m4a';
+        }
+        await _recorder.start(const RecordConfig(encoder: AudioEncoder.aacLc), path: path);
+        setState(() => _isRecording = true);
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Microphone permission is required to record voice.')),
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('Error starting recording: $e');
     }
   }
 
   Future<void> _stopRecording() async {
-    final path = await _recorder.stop();
-    setState(() => _isRecording = false);
-    if (path != null && mounted) {
-      context.read<CaptureBloc>().add(VoiceRecordingStopped(path));
+    try {
+      final path = await _recorder.stop();
+      setState(() => _isRecording = false);
+      if (path != null && path.isNotEmpty && mounted) {
+        context.read<CaptureBloc>().add(VoiceRecordingStopped(path));
+      }
+    } catch (e) {
+      setState(() => _isRecording = false);
+      debugPrint('Error stopping recording: $e');
     }
   }
 
@@ -86,10 +113,12 @@ class _VoiceCapturePageState extends State<VoiceCapturePage> with SingleTickerPr
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  'Tap and hold to record\nyour expense in your own words',
+                Text(
+                  _isRecording
+                      ? 'Recording in progress…\nTap the button to stop'
+                      : 'Tap the microphone button to start recording\nyour expense in your own words',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 15, height: 1.6),
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 15, height: 1.6),
                 ),
                 const SizedBox(height: 56),
 
@@ -110,9 +139,9 @@ class _VoiceCapturePageState extends State<VoiceCapturePage> with SingleTickerPr
                             ),
                           ),
                         ),
-                      GestureDetector(
-                        onTapDown: (_) => _startRecording(),
-                        onTapUp: (_) => _stopRecording(),
+                      InkWell(
+                        onTap: _toggleRecording,
+                        borderRadius: BorderRadius.circular(48),
                         child: Container(
                           width: 96,
                           height: 96,

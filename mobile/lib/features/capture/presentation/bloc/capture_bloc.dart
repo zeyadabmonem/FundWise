@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http_parser/http_parser.dart';
 import '../../../../core/network/api_client.dart';
@@ -109,11 +110,25 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
   Future<void> _onVoiceRecordingStopped(VoiceRecordingStopped event, Emitter<CaptureState> emit) async {
     emit(CaptureProcessing());
     try {
-      final file = File(event.audioFilePath);
-      final bytes = await file.readAsBytes();
+      List<int> bytes;
+      if (kIsWeb) {
+        final dio = Dio();
+        final response = await dio.get<List<int>>(
+          event.audioFilePath,
+          options: Options(responseType: ResponseType.bytes),
+        );
+        bytes = response.data ?? [];
+      } else {
+        final file = File(event.audioFilePath);
+        bytes = await file.readAsBytes();
+      }
+
       final formData = FormData.fromMap({
-        'audioFile': MultipartFile.fromBytes(bytes, filename: 'voice_capture.m4a',
-            contentType: MediaType('audio', 'm4a')),
+        'audioFile': MultipartFile.fromBytes(
+          bytes,
+          filename: 'voice_capture.m4a',
+          contentType: MediaType('audio', 'm4a'),
+        ),
       });
 
       final response = await _apiClient.dio.post('/voice/capture', data: formData);
