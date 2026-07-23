@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/themes/app_theme.dart';
 import '../bloc/dashboard_bloc.dart';
@@ -37,7 +38,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 if (state is DashboardLoading)
                   const SliverFillRemaining(child: Center(child: CircularProgressIndicator(color: AppColors.primary)))
                 else if (state is DashboardError)
-                  SliverFillRemaining(child: _buildError(state.message))
+                  SliverFillRemaining(child: _buildError(context, state.message))
                 else if (state is DashboardLoaded) ...[
                   SliverToBoxAdapter(child: _buildTotalCard(state.summary)),
                   SliverToBoxAdapter(child: _buildCategoryChart(state.summary.categoryBreakdown)),
@@ -49,7 +50,7 @@ class _DashboardPageState extends State<DashboardPage> {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.pushNamed(context, '/transactions/add'),
+        onPressed: () => context.push('/transactions/add'),
         backgroundColor: AppColors.primary,
         icon: const Icon(Icons.add, color: Colors.white),
         label: const Text('Add', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
@@ -294,17 +295,31 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildError(String message) {
+  Widget _buildError(BuildContext context, String message) {
     return Center(child: Padding(
       padding: const EdgeInsets.all(32),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         const Icon(Icons.wifi_off_rounded, size: 48, color: AppColors.textMuted),
         const SizedBox(height: 12),
         Text(message, style: const TextStyle(color: AppColors.textMuted, fontSize: 15), textAlign: TextAlign.center),
-        const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () => context.read<DashboardBloc>().add(DashboardLoadRequested()),
-          child: const Text('Retry'),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () => context.read<DashboardBloc>().add(DashboardLoadRequested()),
+              child: const Text('Retry'),
+            ),
+            const SizedBox(width: 12),
+            OutlinedButton(
+              onPressed: () => context.go('/login'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                side: const BorderSide(color: AppColors.primary),
+              ),
+              child: const Text('Sign In Again'),
+            ),
+          ],
         ),
       ]),
     ));
