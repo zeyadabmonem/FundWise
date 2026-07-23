@@ -126,3 +126,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Make Program accessible to integration test WebApplicationFactory
+public partial class Program { }

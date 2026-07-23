@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/dashboard_entities.dart';
-import '../../domain/usecases/get_dashboard_summary_usecase.dart';
+import '../../domain/repositories/dashboard_repository.dart';
 
 // ─── Events ──────────────────────────────────────────────────────────────
 sealed class DashboardEvent extends Equatable {

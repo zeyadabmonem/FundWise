@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http_parser/http_parser.dart';
 import '../../../../core/network/api_client.dart';
 
 // ─── Shared Capture Entities ──────────────────────────────────────────────────
@@ -108,15 +110,13 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
     emit(CaptureProcessing());
     try {
       final file = File(event.audioFilePath);
-      final formData = {
-        'audioFile': await file.readAsBytes(),
-      };
+      final bytes = await file.readAsBytes();
+      final formData = FormData.fromMap({
+        'audioFile': MultipartFile.fromBytes(bytes, filename: 'voice_capture.m4a',
+            contentType: MediaType('audio', 'm4a')),
+      });
 
-      final response = await _apiClient.dio.post(
-        '/voice/capture',
-        data: formData,
-        options: Options(contentType: 'multipart/form-data'),
-      );
+      final response = await _apiClient.dio.post('/voice/capture', data: formData);
 
       emit(CapturePreview(_mapResponse(response.data, 'Voice')));
     } catch (e) {
@@ -129,7 +129,7 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
     try {
       final bytes = await event.imageFile.readAsBytes();
       final formData = FormData.fromMap({
-        'imageFile': MultipartFile.fromBytes(bytes, filename: 'receipt.jpg', contentType: DioMediaType('image', 'jpeg')),
+        'imageFile': MultipartFile.fromBytes(bytes, filename: 'receipt.jpg', contentType: MediaType('image', 'jpeg')),
       });
 
       final response = await _apiClient.dio.post('/ocr/receipt', data: formData);
