@@ -15,8 +15,16 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("DefaultConnection")
             ?? "Server=(localdb)\\mssqllocaldb;Database=FundWiseDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
 
-        services.AddDbContext<FundWiseDbContext>(options =>
-            options.UseSqlServer(connectionString, b => b.MigrationsAssembly(typeof(FundWiseDbContext).Assembly.FullName)));
+        if (configuration.GetValue<bool>("UseInMemoryDatabase"))
+        {
+            services.AddDbContext<FundWiseDbContext>(options =>
+                options.UseInMemoryDatabase(configuration["InMemoryDatabaseName"] ?? "FundWiseTestDb"));
+        }
+        else
+        {
+            services.AddDbContext<FundWiseDbContext>(options =>
+                options.UseSqlServer(connectionString, b => b.MigrationsAssembly(typeof(FundWiseDbContext).Assembly.FullName)));
+        }
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
